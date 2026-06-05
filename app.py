@@ -515,13 +515,10 @@ def student_tasks():
 @app.route('/performance_report')
 def performance_report():
 
-    # Create database connection
     connection = get_database_connection()
 
-    # Create cursor object
     cursor = connection.cursor(dictionary=True)
 
-    # SQL query with GROUP BY and aggregate functions
     query = """
         SELECT
 
@@ -533,19 +530,15 @@ def performance_report():
             COUNT(student_tasks.student_task_id)
                 AS total_tasks,
 
-            SUM(student_tasks.obtained_marks)
-                AS total_marks,
+            COALESCE(
+                SUM(student_tasks.obtained_marks),
+                0
+            ) AS total_marks,
 
-            AVG(student_tasks.obtained_marks)
-                AS average_marks,
-
-            SUM(
-                CASE
-                    WHEN student_tasks.submission_status = 'Submitted'
-                    THEN 1
-                    ELSE 0
-                END
-            ) AS submitted_tasks
+            COALESCE(
+                AVG(student_tasks.obtained_marks),
+                0
+            ) AS average_marks
 
         FROM students
 
@@ -561,22 +554,17 @@ def performance_report():
         ORDER BY total_marks DESC
     """
 
-    # Execute query
     cursor.execute(query)
 
-    # Fetch report data
     performance_records = cursor.fetchall()
 
-    # Close connection
     cursor.close()
     connection.close()
 
-    # Load report page
     return render_template(
         'performance_report.html',
         performance_records=performance_records
     )
-
 # Attendance summary report
 @app.route('/attendance_summary')
 def attendance_summary():

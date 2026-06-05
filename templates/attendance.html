@@ -1,8 +1,8 @@
-<!--
-<select
+<!-- <select
     name="student_id"
     class="form-control"
 >
+
     {% for student in students %}
 
     <option value="{{ student.student_id }}">
@@ -15,45 +15,49 @@
     {% endfor %}
 
 </select> -->
+{% extends 'layout.html' %}
+
+{% block content %}
 
 <h2>Mark Attendance</h2>
 
-<form action="/save_attendance" method="POST">
+    <form action="/save_attendance" method="POST">
 
-    <label>Student</label>
+        <label>Student</label>
 
-    <select name="student_id" class="form-control">
+        <select name="student_id" class="form-control">
 
-        {% for student in students %}
+            {% for student in students %}
 
-        <option value="{{ student.student_id }}">
-            {{ student.first_name }} {{ student.last_name }}
-        </option>
+            <option value="{{ student.student_id }}">
+                {{ student.first_name }} {{ student.last_name }}
+            </option>
 
-        {% endfor %}
+            {% endfor %}
 
-    </select>
+        </select>
 
-    <br><br>
+        <br><br>
 
-    <label>Status</label>
+        <label>Status</label>
 
-    <select name="attendance_status">
+        <select name="attendance_status">
 
-        <option value="Present">
-            Present
-        </option>
+            <option value="Present">
+                Present
+            </option>
 
-        <option value="Absent">
-            Absent
-        </option>
+            <option value="Absent">
+                Absent
+            </option>
 
-    </select>
+        </select>
 
-    <br><br>
+        <br><br>
 
-    <button type="submit">
-        Save Attendance
-    </button>
+        <button type="submit">
+            Save Attendance
+        </button>
 
-</form>
+    </form>
+    {% endblock %}
